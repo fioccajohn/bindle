@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 @pd.api.extensions.register_dataframe_accessor("bindle")
 class BindleAccessor:
@@ -7,9 +8,21 @@ class BindleAccessor:
     def __init__(self, pandas_obj):
         self._obj = pandas_obj
 
-    def moments(self):
-        """Describe function for the first four statistical moments."""
-        return self._obj.agg(['mean', 'var', 'skew', 'kurt'])
+    @staticmethod
+    def from_drv(rv, function_method):
+        """Quickly create a one-column dataframe from a scipy discrete random variable."""
+
+        m = getattr(rv, function_method)
+        df = pd.DataFrame([(i, m(i)) for i in np.arange(rv.args[0])]).set_index(0).rename_axis('x').rename(columns={1: function_method})
+        return df
+
+    @staticmethod
+    def from_crv(rv, function_method, np_linspace_tuple):
+        """Quickly create a one-column dataframe from a scipy continuous random variable."""
+
+        m = getattr(rv, function_method)
+        df = pd.DataFrame([(i, m(i)) for i in np.linspace(*np_linspace_tuple)]).set_index(0).rename_axis('x').rename(columns={1: function_method})
+        return df
 
     def convert_columns_to_type(self, *args, dtype=None, **kwargs):
         if dtype is None:

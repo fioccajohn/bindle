@@ -11,7 +11,7 @@ requires-python = ">=3.8"
 license = "MIT"
 keywords = []
 authors = [
-  { name = "U.N. Owen", email = "void@some.where" },
+  { name = "John Fiocca", email = "void@some.where" },
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -33,12 +33,15 @@ dependencies = [
   "pandas",
   "pyyaml",
   "scipy",
+  "seaborn",
+  "sklearn",
+  "statsmodels",
 ]
 
 [project.urls]
-Documentation = "https://github.com/U.N. Owen/bindle#readme"
-Issues = "https://github.com/U.N. Owen/bindle/issues"
-Source = "https://github.com/U.N. Owen/bindle"
+Documentation = "https://github.com/fioccajohn/bindle#readme"
+Issues = "https://github.com/fioccajohn/bindle/issues"
+Source = "https://github.com/fioccajohn/bindle"
 
 [project.scripts]
 bindle = "bindle.cli:bindle"
