@@ -1,3 +1,7 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+
 def plot_discrete_distribution(drv, start=None, stop=None, x_max=None, highlight_color_index=0, colors=sns.palettes.color_palette('Set2'), **kwargs):
     """Plot a discrete distribution.
 
