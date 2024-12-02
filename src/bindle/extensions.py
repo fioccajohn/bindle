@@ -9,19 +9,36 @@ class BindleAccessor:
         self._obj = pandas_obj
 
     @staticmethod
-    def from_drv(rv, function_method):
-        """Quickly create a one-column dataframe from a scipy discrete random variable."""
+    def from_drv(drv, distribution_function):
+        """Create a one-column dataframe from a scipy discrete random variable.
 
-        m = getattr(rv, function_method)
-        df = pd.DataFrame([(i, m(i)) for i in np.arange(rv.args[0])]).set_index(0).rename_axis('x').rename(columns={1: function_method})
+        Args:
+            drv: A scipy discrete random variable.
+            distribution_function: Name of the `scipy.stats.random_variable` method to generate `y`.
+
+        Returns:
+            Pandas DataFrame
+        """
+
+        m = getattr(drv, distribution_function)
+        df = pd.DataFrame([(i, m(i)) for i in np.arange(drv.args[0])]).set_index(0).rename_axis('x').rename(columns={1: distribution_function})
         return df
 
     @staticmethod
-    def from_crv(rv, function_method, np_linspace_tuple):
-        """Quickly create a one-column dataframe from a scipy continuous random variable."""
+    def from_crv(crv, distribution_function, np_linspace_tuple):
+        """Create a one-column dataframe from a scipy continuous random variable.
 
-        m = getattr(rv, function_method)
-        df = pd.DataFrame([(i, m(i)) for i in np.linspace(*np_linspace_tuple)]).set_index(0).rename_axis('x').rename(columns={1: function_method})
+        Args:
+            crv: A scipy continuous random variable.
+            distribution_function: Name of the `scipy.stats.random_variable` method to generate `y`.
+            np_linspace_tuple (tuple): The argument to `np.linspace` as a tuple. Min, Max, and Size.
+
+        Returns:
+            Pandas DataFrame
+        """
+
+        m = getattr(crv, distribution_function)
+        df = pd.DataFrame([(i, m(i)) for i in np.linspace(*np_linspace_tuple)]).set_index(0).rename_axis('x').rename(columns={1: distribution_function})
         return df
 
     def convert_columns_to_type(self, *args, dtype=None, **kwargs):
