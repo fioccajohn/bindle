@@ -6,6 +6,7 @@ import pandas as pd
 
 
 class Config:
+    """Utility class for creating, reading, and writing config files to the user's directory."""
     def __init__(self, data: dict):
         for key, value in data.items():
             if isinstance(value, dict):
@@ -73,6 +74,7 @@ def select_sheet_interactively(filepath: str) -> str:
             print("Invalid input. Please enter a number.")
 
 def move_recent_downloads(target_dir=os.getcwd()):
+    """Helper function for moving recently downloaded files as part of a terminal program."""
     downloads_dir = os.path.expanduser("~/Downloads")
     today = datetime.today().date()
     

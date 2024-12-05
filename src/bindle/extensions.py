@@ -1,3 +1,4 @@
+from functools import partial
 import pandas as pd
 import numpy as np
 
@@ -57,3 +58,40 @@ class BindleAccessor:
         # df = self._obj.assign({new_column_name: self._obj.groupby(groupby_key).transform(function)})
         
         # return df
+
+
+
+# Could this work well as a pandas extension? Instead of using partial functions.
+def window_agg(df, func, column='close', partition_by=None):
+    """Windowing convenience function for DataFrames like SQL.
+
+    Args:
+        df: The input dataframe.
+        func: Function to apply to `column`.
+        column: Target column of `func`.
+        partition_by: Column to partition by.
+
+    Returns:
+        DataFrame
+
+    Example Usage:
+        ph.assign(
+            min_close=partial(window_agg, func='min', partition_by='symbol'),
+            sum_close=partial(window_agg, func='sum'),
+            max_close=partial(window_agg, func='max'),
+            count_close=partial(window_agg, func='count'),
+            # max_close=partial(agg_close, agg_function='min'),
+        )
+
+        # None is None
+        # ph[['close']].agg('min')
+
+        # partial(agg_close, agg_function='min')
+        # partial?
+        # ph[['close']].assign(min_close=min_close)
+    """
+    if partition_by is None:
+        return df.loc[:, column].agg(func)
+    else:
+        return df.groupby(partition_by)[[column]].transform(func)
+
